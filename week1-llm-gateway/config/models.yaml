@@ -1,0 +1,26 @@
+# 模型路由表：对外别名 -> 适配器 + 上游配置
+# ${VAR:-default} 会在加载时被环境变量替换；缺少且无默认值会启动失败。
+models:
+  deepseek-v4-pro:
+    adapter: openai_responses
+    upstream_model: ${OPENAI_MODEL:-gpt-4.1}
+    base_url: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+    api_key_env: OPENAI_API_KEY
+    timeout:
+      connect: 5
+      read: 120
+    rate_limit:
+      capacity: 10
+      refill_per_sec: 2
+
+  deepseek-v4-flash:
+    adapter: anthropic_messages
+    upstream_model: ${ANTHROPIC_MODEL:-claude-sonnet-5-5}
+    base_url: ${ANTHROPIC_BASE_URL:-https://api.anthropic.com}
+    api_key_env: ANTHROPIC_API_KEY
+    timeout:
+      connect: 5
+      read: 120
+    rate_limit:
+      capacity: 20
+      refill_per_sec: 5
